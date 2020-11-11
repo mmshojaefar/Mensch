@@ -64,12 +64,12 @@ class Game:
         print('**********************')
 
 
-
-g = Game(24)
-g.add_player('blue')
-g.add_player('yellow')
-g.add_player('red')
-g.start()
+if __name__ == "__main__":
+    g = Game(24)
+    g.add_player('blue')
+    g.add_player('yellow')
+    g.add_player('red')
+    g.start()
 
 #-------------------
 # board = 24*[0]
