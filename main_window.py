@@ -220,8 +220,7 @@ class Main_Window:
                     self.pbutts[j]['bg'] = self.all_buttons_color[m.start_location]
                     self.pbutts[j]['activebackground'] = self.all_buttons_color[m.start_location]
                     self.pbutts[j].grid(row=x, column=y)
-                    # self.player_turn.piece_in_game.append(m)
-                    # self.player_turn.remain_piece.remove(m)
+                    
                     m.enter()
                 elif index < 24 and m.location + self.dice_number == 24 + m.start_location and m.real_location == index:
                     self.move_flag = False
@@ -231,8 +230,6 @@ class Main_Window:
                     self.pbutts[j]['activebackground'] = self.all_buttons_color[ 28+clr.index(self.mensch.turn) ]
                     self.pbutts[j].grid(row=x, column=y)
                     m.move(self.dice_number)
-                    # self.player_turn.piece_in_home.append(m)
-                    # self.player_turn.piece_in_game.remove(m)
                 elif index < 24 and m.location + self.dice_number < 24 + m.start_location and m.real_location == index:
                     self.move_flag = False
                     m.move(self.dice_number)
