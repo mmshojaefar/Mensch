@@ -16,6 +16,8 @@ class Main_Window:
         self.move_flag = False
         self.dice_number = 1
         self.turn = ''
+        self.num_of_players = len(self.colors)
+        self.winners = []
 
         self.root = Tk()
         self.root.title('Mensch')
@@ -50,7 +52,7 @@ class Main_Window:
         self.turns_label.grid(row=5, column=0)
         self.dice = Button(self.root, text='Roll Dice', bg='white', font=self.set_font, height=1, width=10, command=self.dice_button, state='disabled')
         self.dice.grid(row=6, column=0, sticky='n')
-        self.dice_label = Label(self.root, text=str(self.dice_number), anchor="center", font=("default", 50), border=1)
+        self.dice_label = Label(self.root, text='', anchor="center", font=("default", 50), border=1)
         self.dice_label.grid(row=7, column=0)
         
         self.i = 0
@@ -207,12 +209,11 @@ class Main_Window:
     def move(self, j):
         print(self.turn, self.player_turn.remain_piece, self.player_turn.piece_in_game, self.player_turn.piece_in_home)
         clr = ['green','yellow','blue','red']
-        if self.move_flag and j < clr.index(self.turn)*4+4 and j > clr.index(self.turn)*4:
+        if self.move_flag and j < clr.index(self.turn)*4+4 and j >= clr.index(self.turn)*4:
             row = self.pbutts[j].grid_info()['row']
             column = self.pbutts[j].grid_info()['column']
             index = self.all_buttons_grid.index((row,column))
             for m in self.player_turn.can_move:
-                # print(m.location, m.real_location)
                 if self.dice_number == 6 and 24 <= index and index < 28 and m.real_location == -1 and (row,column) in self.remain_buttons_grid:
                     self.move_flag = False
                     x,y = self.all_buttons_grid[m.start_location]
@@ -224,11 +225,16 @@ class Main_Window:
                 elif index < 24 and m.location + self.dice_number == 24 + m.start_location and m.real_location == index:
                     self.move_flag = False
                     x,y = self.home_buttons_grid[ clr.index(self.mensch.turn) ]
-                    self.hit(x,y)
                     self.pbutts[j]['bg'] = self.all_buttons_color[ 28+clr.index(self.mensch.turn) ]
                     self.pbutts[j]['activebackground'] = self.all_buttons_color[ 28+clr.index(self.mensch.turn) ]
                     self.pbutts[j].grid(row=x, column=y)
                     m.move(self.dice_number)
+                    if len(self.player_turn.piece_in_home) == 4:
+                        self.winners.append((self.turn, self.names[self.turn]))
+                        if len(self.mensch.turns) == 1:
+                            self.move_flag = False
+                            self.dice['state'] = 'disabled'
+                            print(self.winners)
                     if len(self.player_turn.piece_in_home) != 0:
                         place = {
                             'green': (2,6),
@@ -242,7 +248,6 @@ class Main_Window:
                             'blue': '#0027fe',
                             'red': '#fe0000'
                         }
-                        print('aaa',place[self.turn][0], place[self.turn][1], len(self.player_turn.piece_in_home))
                         piece_in_home_label = Label(text=len(self.player_turn.piece_in_home), bg=bgc[self.turn], fg='white')
                         piece_in_home_label.grid(row=place[self.turn][0], column=place[self.turn][1])
                 elif index < 24 and m.location + self.dice_number < 24 + m.start_location and m.real_location == index:
@@ -261,23 +266,17 @@ class Main_Window:
                 self.dice_label['text'] = ''
                 self.turns_label['fg'] = self.turn
                 self.turns_label['text'] = 'TURN: ' + str(self.names[self.turn])
-
                         
     def dice_button(self):
         if self.move_flag == False:
-            # for p in self.mensch.players:
-            #     if p.color == self.mensch.turn:
-            #         self.player_turn = p
             self.dice_number = self.player_turn.dice()
             self.dice_label['text'] = str(self.dice_number)
             if self.player_turn.can_move:
                 self.move_flag = True
             else:
-                print(1)
                 self.player_turn = self.mensch.next(self.player_turn)
                 self.turn = self.player_turn.color
                 self.mensch.turn = self.turn
-                # self.root.after(500)
                 self.dice_label['text'] = ''
                 self.turns_label['fg'] = self.player_turn.color        
                 self.turns_label['text'] = 'TURN: ' + str(self.names[self.turn])
@@ -291,3 +290,5 @@ class Main_Window:
                     p['bg'] = ['#5eff5f', '#ffdc68', '#4f5dff', '#ff565b'][index]
                     p['activebackground'] = ['#5eff5f', '#ffdc68', '#4f5dff', '#ff565b'][index]
                     p.grid( row = self.remain_buttons_grid[index][0], column = self.remain_buttons_grid[index][1] )
+
+    # def end_game(self):

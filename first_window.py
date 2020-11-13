@@ -58,12 +58,3 @@ class First_Window:
         # print('----------------')
         # self.root.quit()
         # self.root.destroy()
-
-    # def on_closing(self):
-        # self.flag.append(True)
-        # self.root.destroy()
-
-    
-
-# if __name__ == "__main__":
-#     obj = First_Window(['green', 'yellow', 'blue', 'red'])
