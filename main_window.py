@@ -3,6 +3,8 @@ import tkinter.ttk
 from first_window import First_Window
 from functools import partial
 from game import Game
+from player import Player
+from piece import Piece
 
 class Main_Window:
     def __init__(self, colors_list, mensch, usr):
@@ -84,7 +86,7 @@ class Main_Window:
 
     def create_circle(self, color, x, y):
         self.img[self.i] = PhotoImage(file=fr"button\{color}.png")
-        self.butts[self.i] = Button(self.root, image=self.img[self.i], border=0, width="75", height=75)
+        self.butts[self.i] = Label(self.root, image=self.img[self.i], border=0, width="75", height=75)
         self.butts[self.i].grid(row=x, column=y+1)
         self.i+=1
 
@@ -209,18 +211,15 @@ class Main_Window:
             row = self.pbutts[j].grid_info()['row']
             column = self.pbutts[j].grid_info()['column']
             index = self.all_buttons_grid.index((row,column))
-            # print(self.player_turn.color, index, row, column, self.dice_number)
             for m in self.player_turn.can_move:
                 # print(m.location, m.real_location)
                 if self.dice_number == 6 and 24 <= index and index < 28 and m.real_location == -1 and (row,column) in self.remain_buttons_grid:
-                    # print('aaaaa')
                     self.move_flag = False
                     x,y = self.all_buttons_grid[m.start_location]
                     self.hit(x,y)
                     self.pbutts[j]['bg'] = self.all_buttons_color[m.start_location]
                     self.pbutts[j]['activebackground'] = self.all_buttons_color[m.start_location]
                     self.pbutts[j].grid(row=x, column=y)
-                    
                     m.enter()
                 elif index < 24 and m.location + self.dice_number == 24 + m.start_location and m.real_location == index:
                     self.move_flag = False
@@ -230,6 +229,22 @@ class Main_Window:
                     self.pbutts[j]['activebackground'] = self.all_buttons_color[ 28+clr.index(self.mensch.turn) ]
                     self.pbutts[j].grid(row=x, column=y)
                     m.move(self.dice_number)
+                    if len(self.player_turn.piece_in_home) != 0:
+                        place = {
+                            'green': (2,6),
+                            'yellow': (4,8),
+                            'blue': (6,6),
+                            'red': (4,4)
+                        }
+                        bgc = {
+                            'green': '#277e02',
+                            'yellow': '#ffd800',
+                            'blue': '#0027fe',
+                            'red': '#fe0000'
+                        }
+                        print('aaa',place[self.turn][0], place[self.turn][1], len(self.player_turn.piece_in_home))
+                        piece_in_home_label = Label(text=len(self.player_turn.piece_in_home), bg=bgc[self.turn], fg='white')
+                        piece_in_home_label.grid(row=place[self.turn][0], column=place[self.turn][1])
                 elif index < 24 and m.location + self.dice_number < 24 + m.start_location and m.real_location == index:
                     self.move_flag = False
                     m.move(self.dice_number)
@@ -246,7 +261,8 @@ class Main_Window:
                 self.dice_label['text'] = ''
                 self.turns_label['fg'] = self.turn
                 self.turns_label['text'] = 'TURN: ' + str(self.names[self.turn])
-            
+
+                        
     def dice_button(self):
         if self.move_flag == False:
             # for p in self.mensch.players:
@@ -275,72 +291,3 @@ class Main_Window:
                     p['bg'] = ['#5eff5f', '#ffdc68', '#4f5dff', '#ff565b'][index]
                     p['activebackground'] = ['#5eff5f', '#ffdc68', '#4f5dff', '#ff565b'][index]
                     p.grid( row = self.remain_buttons_grid[index][0], column = self.remain_buttons_grid[index][1] )
-
-# if __name__ == "__main__":
-#     global i, img, butts, pimg, pbutts
-#     mensch = Game(24)
-#     colors = ['green', 'yellow', 'blue', 'red']
-#     mn = Main_Window(colors, mensch)
-
-    
-    # def create_circle(self, color, x, y):
-    #     global i,butts,img
-    #     img[i] = PhotoImage(file=fr"button\{color}.png")
-    #     butts[i] = Button(self.root, image=img[i], border=0, width="75", height=75)
-    #     butts[i].grid(row=x, column=y+1)
-    #     i+=1
-
-    
-    # def create_pieces(self, color, x, y, j):
-    #     global pimg, pbutts
-    #     pimg[j] = PhotoImage(file=fr"pieces/{color}.png")
-    #     pbutts[j] = Button(self.root, image=pimg[j], border=0)
-    #     pbutts[j].grid(row =x, column=y)
-
-        # def create_piece(self, color, j, bgc):
-    #     self.pimg[j] = PhotoImage(file=fr"pieces\{color}.png")
-    #     self.pbutts[j] = Button(self.root, image=self.pimg[j], border=0, bg=bgc)
-    #     self.pbutts[j].grid(row=1, column=9)
-
-    # def create_pieces(self):
-    #     pos = {
-    #         'green': 0,
-    #         'yellow': 4,
-    #         'blue': 8,
-    #         'red': 12
-    #     }
-    #     bgc = {
-    #         'green': '#5eff5f',
-    #         'yellow': '#ffdc68',
-    #         'blue': '#4f5dff',
-    #         'red': '#ff565b'
-    #     }
-    #     for clr in ['green', 'yellow', 'blue', 'red']:
-    #         for counter in range(4):
-    #             self.create_piece(clr, pos[clr]+counter, bgc[clr] )
-
-
-    # def grid_color(self, clr):
-    #     place = {
-    #         'green': (1,9),
-    #         'yellow': (7,9),
-    #         'blue': (7,3),
-    #         'red': (1,3)
-    #     }
-    #     pos = {
-    #         'green': 0,
-    #         'yellow': 4,
-    #         'blue': 8,
-    #         'red': 12
-    #     }
-    #     for counter in range(4):
-    #         self.pbutts[pos[clr]+counter].grid(row=place[clr][0], column=place[clr][1])
-
-        # global pimg, pbutts
-        # pimg = [None]*16
-        # pbutts = [None]*16
-
-        # global i, img, butts
-        # i = 0
-        # img = [None]* 32
-        # butts = [None] * 32
