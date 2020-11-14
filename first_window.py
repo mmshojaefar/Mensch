@@ -3,7 +3,8 @@ import tkinter.ttk
 from game import Game
 
 class First_Window:
-    def __init__(self, colors, mensch):
+    def __init__(self, colors, mensch, users):
+        self.users = users
         self.mensch = mensch
         self.root = Tk()
         self.root.title('Login')
@@ -41,7 +42,13 @@ class First_Window:
         self.usr = self.user_input.get()
         pasw = self.pass_input.get()
         clr = self.color_menu.get()
-        if clr in self.colors:
+        if self.usr in self.users:
+            print(1)
+            print('This user logged in before!')
+        elif clr not in self.colors:
+            print('Select a color')
+        elif clr in self.colors:
+            print(2)
             for ln in s.split('\n'):
                 if self.usr == ln.split()[0] and pasw == ln.split()[1]:
                     self.colors.remove(clr)
@@ -49,12 +56,6 @@ class First_Window:
                     self.root.quit()
                     self.root.destroy()
                     break
-                if self.usr == ln.split()[0] and pasw != ln.split()[1]:
-                    print("Wrong password")
-                    break
             else:
-                print("Wrong username")
-
-        # print('----------------')
-        # self.root.quit()
-        # self.root.destroy()
+                print(4)
+                print("Wrong username or password")

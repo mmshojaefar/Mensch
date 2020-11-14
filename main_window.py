@@ -189,7 +189,7 @@ class Main_Window:
                     self.player_turn = p
             
     def add_player(self):
-        obj = First_Window(self.colors, self.mensch)
+        obj = First_Window(self.colors, self.mensch, list(self.names.values()) )
         self.grid_pieces(self.mensch.turns[-1])
         self.mensch.add_player(self.mensch.turns[-1])
         label = Label(self.root, text=str(self.last)+'. '+obj.usr , width=15, font=self.set_font, fg=self.mensch.turns[-1], anchor='w')
