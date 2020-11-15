@@ -10,6 +10,7 @@ class First_Window:
         self.root = Tk()
         self.root.title('Login')
         self.root.geometry("225x150")
+        self.root.resizable(0, 0)
 
         self.username = Label(self.root, text='username:', width=10, pady=10)
         self.password = Label(self.root, text='password:', width=10)

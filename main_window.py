@@ -21,6 +21,7 @@ class Main_Window:
 
         self.root = Tk()
         self.root.title('Mensch')
+        self.root.resizable(0, 0)
 
         # create a toplevel menu
         self.menubar = Menu(self.root)
