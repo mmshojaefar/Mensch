@@ -16,8 +16,8 @@ class Main_Window:
         self.move_flag = False
         self.dice_number = 1
         self.turn = ''
-        self.num_of_players = len(self.colors)
-        self.winners = []
+        # self.num_of_players = len(self.colors)
+        self.winners = dict()
 
         self.root = Tk()
         self.root.title('Mensch')
@@ -88,7 +88,7 @@ class Main_Window:
 
     def create_circle(self, color, x, y):
         self.img[self.i] = PhotoImage(file=fr"button\{color}.png")
-        self.butts[self.i] = Label(self.root, image=self.img[self.i], border=0, width="75", height=75)
+        self.butts[self.i] = Label(self.root, image=self.img[self.i], border=0, width="77", height="77")
         self.butts[self.i].grid(row=x, column=y+1)
         self.i+=1
 
@@ -173,6 +173,7 @@ class Main_Window:
             self.create_pieces(clr, place[clr][0], place[clr][1], pos[clr]+counter, bgc[clr] )
 
     def start_game(self):
+        self.num_of_players = len(self.colors)
         self.filemenu.entryconfig(0, state="disabled")
         self.filemenu.entryconfig(1, state="disabled")
         self.dice['state'] = 'normal'
@@ -203,8 +204,17 @@ class Main_Window:
     
     def new_game(self):
         self.root.destroy()
-        self.__init__(['green','yellow','blue','red'], self.mensch, '')
-        self.names = {}
+        # mensch = Game(24)
+        # self.__init__(['green','yellow','blue','red'], mensch, '')
+        # self.names = {}
+        mensch = Game(24)
+        colors = ['green', 'yellow', 'blue', 'red']
+        obj = First_Window(colors, mensch, [])
+        if len(colors) == 3:
+            mensch.sort_turns()
+            mw = Main_Window(colors, mensch, obj.usr)
+            mw.create_first()
+            mw.root.mainloop()
         
     def move(self, j):
         print(self.turn, self.player_turn.remain_piece, self.player_turn.piece_in_game, self.player_turn.piece_in_home)
@@ -229,11 +239,16 @@ class Main_Window:
                     self.pbutts[j]['activebackground'] = self.all_buttons_color[ 28+clr.index(self.mensch.turn) ]
                     self.pbutts[j].grid(row=x, column=y)
                     m.move(self.dice_number)
+                    print(self.winners)
                     if len(self.player_turn.piece_in_home) == 4:
-                        self.winners.append((self.turn, self.names[self.turn]))
+                        self.winners[self.turn] = self.names[self.turn]
                         if len(self.mensch.turns) == 1:
                             self.move_flag = False
                             self.dice['state'] = 'disabled'
+                            # -------------------------
+                            self.end_game(self.winners)
+                            # end goes here
+                            # -------------------------
                             print(self.winners)
                     if len(self.player_turn.piece_in_home) != 0:
                         place = {
@@ -277,6 +292,7 @@ class Main_Window:
                 self.player_turn = self.mensch.next(self.player_turn)
                 self.turn = self.player_turn.color
                 self.mensch.turn = self.turn
+                self.root.after(500)
                 self.dice_label['text'] = ''
                 self.turns_label['fg'] = self.player_turn.color        
                 self.turns_label['text'] = 'TURN: ' + str(self.names[self.turn])
@@ -291,4 +307,17 @@ class Main_Window:
                     p['activebackground'] = ['#5eff5f', '#ffdc68', '#4f5dff', '#ff565b'][index]
                     p.grid( row = self.remain_buttons_grid[index][0], column = self.remain_buttons_grid[index][1] )
 
-    # def end_game(self):
+    def end_game(self, rank):
+        ranking = Toplevel()
+        label0 = Label(ranking, text='')
+        label1 = Label(ranking, text='Game Finished!', width=15, font=("default", 17), fg='black')
+        label2 = Label(ranking, text='Ranking', width=15, font=("default", 17), fg='black')
+        label0.grid(row=0,column=0)
+        label1.grid(row=1,column=0)
+        label2.grid(row=2,column=0)
+        for i in range(len(list(rank.keys()))):
+            label = Label(ranking, text=str(i+1) + '.' + rank[list(rank.keys())[i]] , width=15, font=self.set_font, fg=list(rank.keys())[i], anchor='s')
+            label.grid(row=i+3,column=0)
+        labeln = Label(ranking, text='')
+        labeln.grid(row=len(list(rank.keys()))+3,column=0)
+        

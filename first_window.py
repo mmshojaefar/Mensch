@@ -43,12 +43,10 @@ class First_Window:
         pasw = self.pass_input.get()
         clr = self.color_menu.get()
         if self.usr in self.users:
-            print(1)
             print('This user logged in before!')
         elif clr not in self.colors:
             print('Select a color')
         elif clr in self.colors:
-            print(2)
             for ln in s.split('\n'):
                 if self.usr == ln.split()[0] and pasw == ln.split()[1]:
                     self.colors.remove(clr)
@@ -57,5 +55,4 @@ class First_Window:
                     self.root.destroy()
                     break
             else:
-                print(4)
                 print("Wrong username or password")
