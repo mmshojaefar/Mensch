@@ -190,17 +190,19 @@ class Main_Window:
                     self.player_turn = p
             
     def add_player(self):
+        prevlen = len(self.colors)
         obj = First_Window(self.colors, self.mensch, list(self.names.values()) )
-        self.grid_pieces(self.mensch.turns[-1])
-        self.mensch.add_player(self.mensch.turns[-1])
-        label = Label(self.root, text=str(self.last)+'. '+obj.usr , width=15, font=self.set_font, fg=self.mensch.turns[-1], anchor='w')
-        self.names[self.mensch.turns[-1]] = obj.usr
-        label.place(rely=self.last*0.05)
-        self.last += 1
-        if self.last == 5:
-            self.filemenu.entryconfig(0, state="disabled")
-        if self.last > 2:
-            self.filemenu.entryconfig(1, state="normal")
+        if len(self.colors) < prevlen:
+            self.grid_pieces(self.mensch.turns[-1])
+            self.mensch.add_player(self.mensch.turns[-1])
+            label = Label(self.root, text=str(self.last)+'. '+obj.usr , width=15, font=self.set_font, fg=self.mensch.turns[-1], anchor='w')
+            self.names[self.mensch.turns[-1]] = obj.usr
+            label.place(rely=self.last*0.05)
+            self.last += 1
+            if self.last == 5:
+                self.filemenu.entryconfig(0, state="disabled")
+            if self.last > 2:
+                self.filemenu.entryconfig(1, state="normal")
     
     def new_game(self):
         self.root.destroy()

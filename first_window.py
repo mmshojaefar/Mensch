@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import messagebox
 import tkinter.ttk
 from game import Game
 
@@ -43,9 +44,11 @@ class First_Window:
         pasw = self.pass_input.get()
         clr = self.color_menu.get()
         if self.usr in self.users:
-            print('This user logged in before!')
+            print("This user logged in before!")
+            messagebox.showwarning("Login", "This user logged in before!")
         elif clr not in self.colors:
-            print('Select a color')
+            print("Select a color")
+            messagebox.showwarning("Login", "Select a color")
         elif clr in self.colors:
             for ln in s.split('\n'):
                 if self.usr == ln.split()[0] and pasw == ln.split()[1]:
@@ -55,4 +58,5 @@ class First_Window:
                     self.root.destroy()
                     break
             else:
+                messagebox.showerror("Login", "Wrong username or password")
                 print("Wrong username or password")
