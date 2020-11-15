@@ -18,6 +18,7 @@ class Main_Window:
         self.turn = ''
         # self.num_of_players = len(self.colors)
         self.winners = dict()
+        self.delay = False
 
         self.root = Tk()
         self.root.title('Mensch')
@@ -286,19 +287,20 @@ class Main_Window:
                 self.turns_label['text'] = 'TURN: ' + str(self.names[self.turn])
                         
     def dice_button(self):
-        if self.move_flag == False:
+        if self.move_flag == False and self.delay == False:
             self.dice_number = self.player_turn.dice()
             self.dice_label['text'] = str(self.dice_number)
             if self.player_turn.can_move:
                 self.move_flag = True
             else:
-                self.player_turn = self.mensch.next(self.player_turn)
-                self.turn = self.player_turn.color
-                self.mensch.turn = self.turn
-                self.root.after(500)
-                self.dice_label['text'] = ''
-                self.turns_label['fg'] = self.player_turn.color        
-                self.turns_label['text'] = 'TURN: ' + str(self.names[self.turn])
+                self.delay = True
+                self.root.after(1000, self.assign)
+                # self.player_turn = self.mensch.next(self.player_turn)
+                # self.turn = self.player_turn.color
+                # self.mensch.turn = self.turn
+                # self.dice_label['text'] = ''
+                # self.turns_label['fg'] = self.player_turn.color        
+                # self.turns_label['text'] = 'TURN: ' + str(self.names[self.turn])
             print(self.player_turn.color, self.player_turn.can_move)
             
     def hit(self, x ,y):
@@ -324,3 +326,11 @@ class Main_Window:
         labeln = Label(ranking, text='')
         labeln.grid(row=len(list(rank.keys()))+3,column=0)
         
+    def assign(self):
+        self.delay = False
+        self.player_turn = self.mensch.next(self.player_turn)
+        self.turn = self.player_turn.color
+        self.mensch.turn = self.turn
+        self.dice_label['text'] = ''
+        self.turns_label['fg'] = self.player_turn.color        
+        self.turns_label['text'] = 'TURN: ' + str(self.names[self.turn])
