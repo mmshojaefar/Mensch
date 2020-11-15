@@ -221,7 +221,7 @@ class Main_Window:
             mw.root.mainloop()
         
     def move(self, j):
-        print(self.turn, self.player_turn.remain_piece, self.player_turn.piece_in_game, self.player_turn.piece_in_home)
+        # print(self.turn, self.player_turn.remain_piece, self.player_turn.piece_in_game, self.player_turn.piece_in_home)
         clr = ['green','yellow','blue','red']
         if self.move_flag and j < clr.index(self.turn)*4+4 and j >= clr.index(self.turn)*4:
             row = self.pbutts[j].grid_info()['row']
@@ -243,7 +243,7 @@ class Main_Window:
                     self.pbutts[j]['activebackground'] = self.all_buttons_color[ 28+clr.index(self.mensch.turn) ]
                     self.pbutts[j].grid(row=x, column=y)
                     m.move(self.dice_number)
-                    print(self.winners)
+                    # print(self.winners)
                     if len(self.player_turn.piece_in_home) == 4:
                         self.winners[self.turn] = self.names[self.turn]
                         if len(self.mensch.turns) == 1:
@@ -251,9 +251,8 @@ class Main_Window:
                             self.dice['state'] = 'disabled'
                             # -------------------------
                             self.end_game(self.winners)
-                            # end goes here
                             # -------------------------
-                            print(self.winners)
+                            # print(self.winners)
                     if len(self.player_turn.piece_in_home) != 0:
                         place = {
                             'green': (2,6),
@@ -292,16 +291,10 @@ class Main_Window:
             self.dice_label['text'] = str(self.dice_number)
             if self.player_turn.can_move:
                 self.move_flag = True
-            else:
+            elif self.dice_number != 6:
                 self.delay = True
                 self.root.after(1000, self.assign)
-                # self.player_turn = self.mensch.next(self.player_turn)
-                # self.turn = self.player_turn.color
-                # self.mensch.turn = self.turn
-                # self.dice_label['text'] = ''
-                # self.turns_label['fg'] = self.player_turn.color        
-                # self.turns_label['text'] = 'TURN: ' + str(self.names[self.turn])
-            print(self.player_turn.color, self.player_turn.can_move)
+            # print(self.player_turn.color, self.player_turn.can_move)
             
     def hit(self, x ,y):
         for p in self.pbutts:
