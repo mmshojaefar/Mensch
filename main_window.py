@@ -1,10 +1,18 @@
 from tkinter import *
 import tkinter.ttk
-from first_window import First_Window
+import logging
 from functools import partial
+from first_window import First_Window
 from game import Game
 from player import Player
 from piece import Piece
+
+slog = logging.Logger(__name__, level=logging.INFO)
+logformat = logging.Formatter('%(asctime)s- %(message)s')
+logfile = logging.FileHandler('logs.log')
+logfile.setFormatter(logformat)
+slog.addHandler(logfile)
+
 
 class Main_Window:
     def __init__(self, colors_list, mensch, usr):
@@ -16,7 +24,6 @@ class Main_Window:
         self.move_flag = False
         self.dice_number = 1
         self.turn = ''
-        # self.num_of_players = len(self.colors)
         self.winners = dict()
         self.delay = False
 
@@ -208,9 +215,6 @@ class Main_Window:
     
     def new_game(self):
         self.root.destroy()
-        # mensch = Game(24)
-        # self.__init__(['green','yellow','blue','red'], mensch, '')
-        # self.names = {}
         mensch = Game(24)
         colors = ['green', 'yellow', 'blue', 'red']
         obj = First_Window(colors, mensch, [])
@@ -221,7 +225,6 @@ class Main_Window:
             mw.root.mainloop()
         
     def move(self, j):
-        # print(self.turn, self.player_turn.remain_piece, self.player_turn.piece_in_game, self.player_turn.piece_in_home)
         clr = ['green','yellow','blue','red']
         if self.move_flag and j < clr.index(self.turn)*4+4 and j >= clr.index(self.turn)*4:
             row = self.pbutts[j].grid_info()['row']
@@ -243,7 +246,6 @@ class Main_Window:
                     self.pbutts[j]['activebackground'] = self.all_buttons_color[ 28+clr.index(self.mensch.turn) ]
                     self.pbutts[j].grid(row=x, column=y)
                     m.move(self.dice_number)
-                    # print(self.winners)
                     if len(self.player_turn.piece_in_home) == 4:
                         self.winners[self.turn] = self.names[self.turn]
                         if len(self.mensch.turns) == 1:
@@ -251,8 +253,8 @@ class Main_Window:
                             self.dice['state'] = 'disabled'
                             # -------------------------
                             self.end_game(self.winners)
+                            slog.info(' '.join(list(self.winners.values())))
                             # -------------------------
-                            # print(self.winners)
                     if len(self.player_turn.piece_in_home) != 0:
                         place = {
                             'green': (2,6),
@@ -294,7 +296,6 @@ class Main_Window:
             elif self.dice_number != 6:
                 self.delay = True
                 self.root.after(1000, self.assign)
-            # print(self.player_turn.color, self.player_turn.can_move)
             
     def hit(self, x ,y):
         for p in self.pbutts:
