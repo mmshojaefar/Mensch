@@ -29,8 +29,8 @@ class Player:
         if self.can_move:
             if self.can_move[num] in self.remain_piece:
                 self.can_move[num].enter()
-                self.piece_in_game.append(self.can_move[num])
-                self.remain_piece.remove(self.can_move[num])
+                # self.piece_in_game.append(self.can_move[num])
+                # self.remain_piece.remove(self.can_move[num])
             else:
                 self.can_move[num].move(dice)
 

@@ -56,6 +56,8 @@ class Piece:
         if self.board[self.real_location] != None:
             self.board[self.real_location].hit()
         self.board[self.real_location] = self
+        self.player.piece_in_game.append(self)
+        self.player.remain_piece.remove(self)
 
     def __repr__(self):
         return f'({self.color}, {self.real_location})'
