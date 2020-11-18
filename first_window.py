@@ -35,7 +35,6 @@ class First_Window:
         self.login['command'] = self.check
         self.usr = ''
 
-        # self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
         self.root.mainloop()
     
     def check(self):
@@ -45,11 +44,10 @@ class First_Window:
         pasw = self.pass_input.get()
         clr = self.color_menu.get()
         if self.usr in self.users:
-            print("This user logged in before!")
             messagebox.showwarning("Login", "This user logged in before!")
         elif clr not in self.colors:
             print("Select a color")
-            messagebox.showwarning("Login", "Select a color")
+            messagebox.showwarning("Login", "Select right color that is not in the game")
         elif clr in self.colors:
             for ln in s.split('\n'):
                 if self.usr == ln.split()[0] and pasw == ln.split()[1]:
@@ -60,4 +58,3 @@ class First_Window:
                     break
             else:
                 messagebox.showerror("Login", "Wrong username or password")
-                print("Wrong username or password")

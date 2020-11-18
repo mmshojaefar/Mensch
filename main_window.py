@@ -69,17 +69,11 @@ class Main_Window:
         self.butts = [None] * 32
         self.grid_circle()
 
-        self.all_buttons = [self.butts[3], self.butts[7], self.butts[11], self.butts[12], self.butts[13], self.butts[17], self.butts[23],
-                       self.butts[22], self.butts[21], self.butts[26], self.butts[30], self.butts[29], self.butts[28], self.butts[24],
-                       self.butts[20], self.butts[19], self.butts[18], self.butts[14], self.butts[8], self.butts[9], self.butts[10],
-                       self.butts[5], self.butts[1], self.butts[2], self.butts[4], self.butts[31], self.butts[27], self.butts[0], self.butts[6],
-                       self.butts[16], self.butts[25], self.butts[15]]
         self.all_buttons_grid = [(1,7),(2,7),(3,7),(3,8),(3,9),(4,9),(5,9),(5,8),(5,7),(6,7),(7,7),(7,6),(7,5),(6,5),(5,5),(5,4),(5,3),(4,3),(3,3),
                             (3,4),(3,5),(2,5),(1,5),(1,6),(1,9),(7,9),(7,3),(1,3),(2,6),(4,8),(6,6),(4,4)]
         self.all_buttons_color = ['#5eff5f','white','white','white','white','white','#ffdc68','white','white','white','white','white','#4f5dff',
                              'white','white','white','white','white','#ff565b','white','white','white','white','white','#5eff5f','#ffdc68',
                              '#4f5dff','#ff565b','#5eff5f','#ffdc68','#4f5dff','#ff565b']
-        self.game_buttons = self.all_buttons[:24]
         self.game_buttons_grid = self.all_buttons_grid[:24]
         self.remain_buttons_grid = self.all_buttons_grid[24:28]
         self.home_buttons_grid = self.all_buttons_grid[28:]
